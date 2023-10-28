@@ -1,0 +1,8 @@
+pytesseract~=0.3.9
+Pillow~=9.0.1
+pure-python-adb~=0.3.0.dev0
+pyperclip~=1.8.2
+pyautogui~=0.9.53
+PyGetWindow~=0.0.9
+customtkinter~=5.2.0
+system-hotkey~=1.0.3
