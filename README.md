@@ -1,6 +1,11 @@
 # RoKStat
 This program reads the stats of top N players in the kingdom. It can be used with the PC version or with BlueStacks instance via ADB to take screenshots and parses them using the Tesseract OCR.
 
+## Community
+For comments, suggestions, and to stay informed about updates, please join our Discord community.
+
+https://discord.gg/egZbTarX6q
+
 ## Dependencies
 
 The following tools are required to run this program properly:
