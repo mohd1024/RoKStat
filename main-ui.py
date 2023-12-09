@@ -238,9 +238,6 @@ class OutputFrame(customtkinter.CTkFrame):
         }
 
 
-SIZE_STR = "380x558"
-
-
 class App(customtkinter.CTk):
     def __init__(self, params):
         super().__init__()
@@ -249,7 +246,7 @@ class App(customtkinter.CTk):
         hk.register(['f10'], callback=lambda event: self.stopScanning())
 
         self.title("RoKStat")
-        self.geometry(SIZE_STR)
+        self.geometry(self.getScaledSizeStr())
         self.attributes('-topmost', True)
 
         self.grid_columnconfigure(0, weight=1)
@@ -305,6 +302,15 @@ class App(customtkinter.CTk):
                                                    fg_color=("gray80", "gray20"), corner_radius=12,
                                                    width=80, height=18, anchor="e")
         self.timeToFinish.grid(row=2, column=2, padx=(0, 10), pady=(0, 5), sticky="ne")
+
+    def getScaledSizeStr(self):
+        width, height = pyautogui.size()
+        SIZE_STR = "380x558"
+        if width == 1920 and height == 1080:
+            return SIZE_STR
+        else:
+            return "{}x{}".format(int(380/1920*width), 558)
+
 
     def updateProgress(self, value, total, timeInterval):
         self.progressbar.set(value / total)
@@ -365,7 +371,7 @@ class App(customtkinter.CTk):
                 return
 
             # move the application to the top-left corner.
-            self.geometry("{}+10+10".format(SIZE_STR))
+            self.geometry("{}+10+10".format(self.getScaledSizeStr()))
 
         else:
             # Check if adb installed

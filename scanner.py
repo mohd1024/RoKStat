@@ -24,62 +24,99 @@ class ImageProcessingProfile(Enum):
     KILLPOINTS = 7
 
 class DevicePC:
-    TAPS = {
-        "1": (530, 400),
-        "2": (530, 485),
-        "3": (530, 570),
-        "4": (530, 655),
-        "info": (810, 780, 967, 193, 89, 36, False, ImageProcessingProfile.PLAIN, False, True, "info"),
-        "kills": (913, 538, 1007, 558, 50, 32, False, ImageProcessingProfile.PLAIN, False, False, "kill"),
-        "exitinfo": (1456, 210, 979, 234, 145, 36, False, ImageProcessingProfile.PLAIN, False, True, "profile"),
-        "exitprofile": (1430, 250, 908, 193, 128, 38, False, ImageProcessingProfile.PLAIN, False, True, "power"),
-        "+": (530, 672),
-        "namecopy": (607, 294),
-        "profile-exit-button": (1400, 228, 61, 46, False, ImageProcessingProfile.PLAIN, True, True, "x"),
-    }
 
-    # format (x, y, width, height, numbers_only, invert, filters)
-    PROFILE_PAGE_COORDINATES = {
-        "id": (1220, 327, 186, 29, False, ImageProcessingProfile.ID, True, False),
-        "alliance": (1025, 438, 390, 34, False, ImageProcessingProfile.ALLIANCE, True, True, 8),
-        "power": (1194, 480, 220, 34, True, ImageProcessingProfile.POWER, True, False),
-        "kill-points": (1175, 522, 240, 34, True, ImageProcessingProfile.KILLPOINTS, True, False),
-    }
+    def __init__(self):
+        self.width, self.height = pyautogui.size()
 
-    # format (x, y, width, height, numbers_only, invert, filters)
-    TOP_LIST_PAGE_COORDINATES = {
-        "name": (564, 648, 384, 32, False, ImageProcessingProfile.PLAIN, True, False),
-        "power": (1246, 648, 140, 44, True, ImageProcessingProfile.PLAIN, True, False),
-    }
+        print("Resolution: {}x{}".format(self.width, self.height))
 
-    # format (x, y, width, height, numbers_only, invert, filters)
-    INFO_PAGE_COORDINATES = {
-        "res-gather": (1185, 672, 226, 38, True, ImageProcessingProfile.INFO, True, False),
-        "res-assist": (1185, 724, 226, 38, True, ImageProcessingProfile.INFO, True, False),
-        "dead-count": (1220, 532, 190, 38, True, ImageProcessingProfile.INFO, True, True),
-    }
+        self.TAPS = {
+            "1": (self.scaleHorizontal(530), self.scaleVertical(400)),
+            "2": (self.scaleHorizontal(530), self.scaleVertical(485)),
+            "3": (self.scaleHorizontal(530), self.scaleVertical(570)),
+            "4": (self.scaleHorizontal(530), self.scaleVertical(655)),
+            "info": (self.scaleHorizontal(810), self.scaleVertical(780), self.scaleHorizontal(967),
+                     self.scaleVertical(193), self.scaleHorizontal(89), self.scaleVertical(36), False,
+                     ImageProcessingProfile.PLAIN, False, True, "info"),
+            "kills": (self.scaleHorizontal(913), self.scaleVertical(538), self.scaleHorizontal(1007),
+                      self.scaleVertical(558), self.scaleHorizontal(50), self.scaleVertical(32), False,
+                      ImageProcessingProfile.PLAIN, False, False, "kill"),
+            "exitinfo": (self.scaleHorizontal(1456), self.scaleVertical(210), self.scaleHorizontal(979),
+                         self.scaleVertical(234), self.scaleHorizontal(145), self.scaleVertical(36), False,
+                         ImageProcessingProfile.PLAIN, False, True, "profile"),
+            "exitprofile": (self.scaleHorizontal(1430), self.scaleVertical(250), self.scaleHorizontal(908),
+                            self.scaleVertical(193), self.scaleHorizontal(128), self.scaleVertical(38), False,
+                            ImageProcessingProfile.PLAIN, False, True, "power"),
+            "+": (self.scaleHorizontal(530), self.scaleVertical(672)),
+            "namecopy": (self.scaleHorizontal(607), self.scaleVertical(294)),
+            "profile-exit-button": (self.scaleHorizontal(1400), self.scaleVertical(228), self.scaleHorizontal(61),
+                                    self.scaleVertical(46), False, ImageProcessingProfile.PLAIN, True, True, "x"),
+        }
 
-    # format (x, y, width, height, numbers_only, invert)
-    # "kill-points": (1058, 492, 240, 30, True, False, False),
-    # Note, for the kills, decrease 6 from the x coordinates because we fill the first 7 pixels with white as margine.
-    KILLS_PAGE_COORDINATES = {
-        "t5-kills": (868, 780, 190, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t5-points": (1124, 780, 220, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t4-kills": (868, 743, 190, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t4-points": (1124, 743, 220, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t3-kills": (868, 706, 190, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t3-points": (1124, 706, 220, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t2-kills": (868, 669, 190, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t2-points": (1124, 669, 220, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t1-kills": (868, 632, 190, 30, True, ImageProcessingProfile.KILLS, False, False),
-        "t1-points": (1124, 632, 220, 30, True, ImageProcessingProfile.KILLS, False, False),
-    }
+        # format (x, y, width, height, numbers_only, invert, filters)
+        self.PROFILE_PAGE_COORDINATES = {
+            "id": (self.scaleHorizontal(1220), self.scaleVertical(327), self.scaleHorizontal(186),
+                   self.scaleVertical(29), False, ImageProcessingProfile.ID, True, False),
+            "alliance": (self.scaleHorizontal(1025), self.scaleVertical(438), self.scaleHorizontal(390),
+                         self.scaleVertical(34), False, ImageProcessingProfile.ALLIANCE, True, True,
+                         self.scaleHorizontal(8)),
+            "power": (self.scaleHorizontal(1194), self.scaleVertical(480), self.scaleHorizontal(220),
+                      self.scaleVertical(34), True, ImageProcessingProfile.POWER, True, False),
+            "kill-points": (self.scaleHorizontal(1175), self.scaleVertical(522), self.scaleHorizontal(240),
+                            self.scaleVertical(34), True, ImageProcessingProfile.KILLPOINTS, True, False),
+        }
 
-    # format (x, y, width, height, numbers_only, invert)
-    SELF_INFO_PAGE = {
-        "name": (618, 274, 292, 39, False, ImageProcessingProfile.PLAIN, True, False),
-        "verify": (545, 488, 66, 29, False, ImageProcessingProfile.PLAIN, True, False, "troops")
-    }
+        # format (x, y, width, height, numbers_only, invert, filters)
+        self.TOP_LIST_PAGE_COORDINATES = {
+            "name": (self.scaleHorizontal(564), self.scaleVertical(648), self.scaleHorizontal(384),
+                     self.scaleVertical(32), False, ImageProcessingProfile.PLAIN, True, False),
+            "power": (self.scaleHorizontal(1246), self.scaleVertical(648), self.scaleHorizontal(140),
+                      self.scaleVertical(44), True, ImageProcessingProfile.PLAIN, True, False),
+        }
+
+        # format (x, y, width, height, numbers_only, invert, filters)
+        self.INFO_PAGE_COORDINATES = {
+            "res-gather": (self.scaleHorizontal(1185), self.scaleVertical(672), self.scaleHorizontal(226),
+                           self.scaleVertical(38), True, ImageProcessingProfile.INFO, True, False),
+            "res-assist": (self.scaleHorizontal(1185), self.scaleVertical(724), self.scaleHorizontal(226),
+                           self.scaleVertical(38), True, ImageProcessingProfile.INFO, True, False),
+            "dead-count": (self.scaleHorizontal(1220), self.scaleVertical(532), self.scaleHorizontal(190),
+                           self.scaleVertical(38), True, ImageProcessingProfile.INFO, True, True),
+        }
+
+        # format (x, y, width, height, numbers_only, invert)
+        # "kill-points": (1058, 492, 240, 30, True, False, False),
+        # Note, for the kills, decrease 6 from the x coordinates because we fill the first 7 pixels with white as margine.
+        self.KILLS_PAGE_COORDINATES = {
+            "t5-kills": (self.scaleHorizontal(868), self.scaleVertical(780), self.scaleHorizontal(190),
+                         self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t5-points": (self.scaleHorizontal(1124), self.scaleVertical(780), self.scaleHorizontal(220),
+                          self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t4-kills": (self.scaleHorizontal(868), self.scaleVertical(743), self.scaleHorizontal(190),
+                         self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t4-points": (self.scaleHorizontal(1124), self.scaleVertical(743), self.scaleHorizontal(220),
+                          self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t3-kills": (self.scaleHorizontal(868), self.scaleVertical(706), self.scaleHorizontal(190),
+                         self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t3-points": (self.scaleHorizontal(1124), self.scaleVertical(706), self.scaleHorizontal(220),
+                          self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t2-kills": (self.scaleHorizontal(868), self.scaleVertical(669), self.scaleHorizontal(190),
+                         self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t2-points": (self.scaleHorizontal(1124), self.scaleVertical(669), self.scaleHorizontal(220),
+                          self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t1-kills": (self.scaleHorizontal(868), self.scaleVertical(632), self.scaleHorizontal(190),
+                         self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+            "t1-points": (self.scaleHorizontal(1124), self.scaleVertical(632), self.scaleHorizontal(220),
+                          self.scaleVertical(30), True, ImageProcessingProfile.KILLS, False, False),
+        }
+
+        # format (x, y, width, height, numbers_only, invert)
+        self.SELF_INFO_PAGE = {
+            "name": (self.scaleHorizontal(618), self.scaleVertical(274), self.scaleHorizontal(292),
+                     self.scaleVertical(39), False, ImageProcessingProfile.PLAIN, True, False),
+            "verify": (self.scaleHorizontal(545), self.scaleVertical(488), self.scaleHorizontal(66),
+                       self.scaleVertical(29), False, ImageProcessingProfile.PLAIN, True, False, "troops")
+        }
 
     def get_tap_coords(self, key):
         return self.TAPS[key]
@@ -99,12 +136,18 @@ class DevicePC:
             pyautogui.mouseUp()
 
     def swipeProfileUp(self):
-        pyautogui.moveTo(530, 672)
-        pyautogui.dragRel(0, -85, duration=2)
+        pyautogui.moveTo(self.scaleHorizontal(530), self.scaleVertical(672))
+        pyautogui.dragRel(0, -1 * self.scaleVertical(85), duration=2)
         time.sleep(1)
 
     def trimToSave(self, img):
-        return img.crop((412, 170, 1508, 978))
+        return img.crop((self.scaleHorizontal(412), self.scaleVertical(170), self.scaleHorizontal(1508), self.scaleVertical(978)))
+
+    def scaleVertical(self, val):
+        return val if self.height == 1080 else int(val/1080*self.height)
+
+    def scaleHorizontal(self, val):
+        return val if self.width == 1920 else int(val/1920*self.width)
 
 
 class DeviceADB:
@@ -187,6 +230,12 @@ class DeviceADB:
 
     def trimToSave(self, img):
         return img
+
+    def scaleVertical(self, val):
+        return val
+
+    def scaleHorizontal(self, val):
+        return val
 
 
 class StatsScanner:
@@ -308,7 +357,7 @@ class StatsScanner:
             subImg = autocontrast(subImg, cutoff=(0, 75))
             subImg = subImg.filter(ImageFilter.UnsharpMask(radius=5, percent=100, threshold=0))
             # Fill the first 7 pixels by white. This requires cutting the images at least 6 pixels ahead in the x-axis.
-            subImg.paste(255, [0, 0, 7, subImg.size[1]])
+            subImg.paste(255, [0, 0, self.device.scaleHorizontal(7), subImg.size[1]])
         elif preProcessingProfile == ImageProcessingProfile.ID:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
@@ -316,7 +365,7 @@ class StatsScanner:
             subImg = autocontrast(subImg, cutoff=(0, 75))
             subImg = subImg.filter(ImageFilter.UnsharpMask(radius=10, percent=300, threshold=0))
             # Fill the first 3 pixels by white.
-            subImg.paste(255, [0, 0, 3, subImg.size[1]])
+            subImg.paste(255, [0, 0, self.device.scaleHorizontal(3), subImg.size[1]])
             confStr = " -c tessedit_char_whitelist=ID0123456789():"
         elif preProcessingProfile == ImageProcessingProfile.ALLIANCE:
             fillWidth = coords[8]
@@ -338,6 +387,7 @@ class StatsScanner:
             subImg = grayscale(subImg)
             subImg = autocontrast(subImg, cutoff=(0, 65))
             subImg = subImg.filter(ImageFilter.UnsharpMask(radius=8, percent=10, threshold=0))
+            # subImg.save("C:/rok-scans/debug/{}-kp.png".format(self.currentProfile), "PNG")
         elif preProcessingProfile == ImageProcessingProfile.INFO:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
@@ -503,7 +553,7 @@ class StatsScanner:
 
         # Show more info page
         # first, hid the kills window, wait a moment, then click "More Info"
-        self.device.tap((625, 681), True)
+        self.device.tap((self.device.scaleHorizontal(625), self.device.scaleVertical(681)), True)
         time.sleep(StatsScanner.JUMP_DELAY)
         infoImg = self.show_next_screen("info")
 
