@@ -55,8 +55,8 @@ class DevicePC:
 
         # format (x, y, width, height, numbers_only, invert, filters)
         self.PROFILE_PAGE_COORDINATES = {
-            "id": (self.scaleHorizontal(1220), self.scaleVertical(327), self.scaleHorizontal(186),
-                   self.scaleVertical(29), False, ImageProcessingProfile.ID, True, False),
+            "id": (self.scaleHorizontal(1220), self.scaleVertical(323), self.scaleHorizontal(190),
+                   self.scaleVertical(32), False, ImageProcessingProfile.ID, True, False),
             "alliance": (self.scaleHorizontal(1025), self.scaleVertical(438), self.scaleHorizontal(390),
                          self.scaleVertical(34), False, ImageProcessingProfile.ALLIANCE, True, True,
                          self.scaleHorizontal(8)),
@@ -362,7 +362,7 @@ class StatsScanner:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
             subImg = grayscale(subImg)
-            subImg = autocontrast(subImg, cutoff=(0, 75))
+            subImg = autocontrast(subImg, cutoff=(0, 78))
             subImg = subImg.filter(ImageFilter.UnsharpMask(radius=10, percent=300, threshold=0))
             # Fill the first 3 pixels by white.
             subImg.paste(255, [0, 0, self.device.scaleHorizontal(3), subImg.size[1]])
