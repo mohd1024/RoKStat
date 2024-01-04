@@ -239,7 +239,6 @@ class DeviceADB:
 
 
 class StatsScanner:
-    JUMP_DELAY = 0.25
     CSV_DETAILS = [
         "Timestamp",
         "Rank",
@@ -286,8 +285,9 @@ class StatsScanner:
             print("Unknown device type. Accepted types: {pc,adb}")
             quit(-1)
 
-    def start(self, progressCallBack=None):
+        self.jumpDelay = float(params["delay"])
 
+    def start(self, progressCallBack=None):
         # Create project folder
         projectFolder = "{}\\{}\\".format(self.params["dir"], self.params["tag"])
         if not os.path.exists(projectFolder):
@@ -362,11 +362,12 @@ class StatsScanner:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
             subImg = grayscale(subImg)
-            subImg = autocontrast(subImg, cutoff=(0, 78))
-            subImg = subImg.filter(ImageFilter.UnsharpMask(radius=10, percent=300, threshold=0))
+            subImg = autocontrast(subImg, cutoff=(0, 80))
+            # subImg = subImg.filter(ImageFilter.UnsharpMask(radius=10, percent=50, threshold=0))
             # Fill the first 3 pixels by white.
             subImg.paste(255, [0, 0, self.device.scaleHorizontal(3), subImg.size[1]])
             confStr = " -c tessedit_char_whitelist=ID0123456789():"
+            # subImg.save("debug/{}-id.png".format(self.currentProfile), "PNG")
         elif preProcessingProfile == ImageProcessingProfile.ALLIANCE:
             fillWidth = coords[8]
             subImg = subImg.convert("RGB")
@@ -374,20 +375,21 @@ class StatsScanner:
             subImg = grayscale(subImg)
             subImg = autocontrast(subImg, cutoff=(0, 85))
             subImg.paste(255, [0, 0, fillWidth, subImg.size[1]])
+            # subImg.save("debug/{}-alliance.png".format(self.currentProfile), "PNG")
         elif preProcessingProfile == ImageProcessingProfile.POWER:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
             subImg = grayscale(subImg)
-            subImg = autocontrast(subImg, cutoff=(0, 65))
-            subImg = subImg.filter(ImageFilter.UnsharpMask(radius=8, percent=10, threshold=0))
-            # subImg.save("C:/rok-scans/debug/{}-power.png".format(self.currentProfile), "PNG")
+            subImg = autocontrast(subImg, cutoff=(0, 90))
+            subImg = subImg.filter(ImageFilter.UnsharpMask(radius=2, percent=10, threshold=0))
+            # subImg.save("debug/{}-pr.png".format(self.currentProfile), "PNG")
         elif preProcessingProfile == ImageProcessingProfile.KILLPOINTS:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
             subImg = grayscale(subImg)
-            subImg = autocontrast(subImg, cutoff=(0, 65))
-            subImg = subImg.filter(ImageFilter.UnsharpMask(radius=8, percent=10, threshold=0))
-            # subImg.save("C:/rok-scans/debug/{}-kp.png".format(self.currentProfile), "PNG")
+            subImg = autocontrast(subImg, cutoff=(0, 80))
+            subImg = subImg.filter(ImageFilter.UnsharpMask(radius=2, percent=10, threshold=0))
+            # subImg.save("debug/{}-kp.png".format(self.currentProfile), "PNG")
         elif preProcessingProfile == ImageProcessingProfile.INFO:
             subImg = subImg.convert("RGB")
             subImg = invert(subImg)
@@ -457,7 +459,7 @@ class StatsScanner:
                 # Not a usual delay, try to tap again
                 self.device.tap(screenInfo[:2], fastClick)
 
-            time.sleep(StatsScanner.JUMP_DELAY)
+            time.sleep(self.jumpDelay)
             screenImg = self.device.take_screenshot()
             verifyTxt = self.read_string_from_image(screenImg, screenInfo[2:]).lower()
             if verifyTxt == screenInfo[10]:
@@ -552,9 +554,9 @@ class StatsScanner:
         killInfo.insert(0, killpoints)
 
         # Show more info page
-        # first, hid the kills window, wait a moment, then click "More Info"
+        # first, hide the kills window, wait a moment, then click "More Info"
         self.device.tap((self.device.scaleHorizontal(625), self.device.scaleVertical(681)), True)
-        time.sleep(StatsScanner.JUMP_DELAY)
+        time.sleep(0.5 * self.jumpDelay)
         infoImg = self.show_next_screen("info")
 
         # We have two cases here, your own more-info page is different from others more-info TBD: Handle this case
@@ -570,7 +572,7 @@ class StatsScanner:
 
         # Copy and save the player name
         self.device.tap(self.device.get_tap_coords("namecopy"))
-        time.sleep(2 * StatsScanner.JUMP_DELAY)
+        time.sleep(2 * self.jumpDelay)
         username = self.device.get_clipboard()
         pstats.insert(2, username)
 

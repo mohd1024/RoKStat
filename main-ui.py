@@ -153,8 +153,8 @@ class SourceFrame(customtkinter.CTkFrame):
         self.deviceVariable.set(params["device"])
         self.setInfoView()
 
-        msg1 = "Required Resolution: 1920x1080 in Fullscreen"
-        msg2 = "The game must be opened on the individual power ranking"
+        msg1 = "Recommended Resolution: 1920x1080 in Fullscreen"
+        msg2 = "Open RoK at the individual power ranking page"
         self.msg1 = customtkinter.CTkLabel(self, text=msg1, fg_color="transparent", corner_radius=6, height=15)
         self.msg1.grid(row=3, column=0, padx=10, pady=(0, 0), columnspan=2, sticky="w")
         self.msg2 = customtkinter.CTkLabel(self, text=msg2, fg_color="transparent", corner_radius=6, height=15)
@@ -189,14 +189,24 @@ class ScanParametersFrame(customtkinter.CTkFrame):
         self.title.grid(row=0, column=0, padx=10, pady=(10, 0), columnspan=2, sticky="ew")
 
         # number of profiles
-        self.descLabel = customtkinter.CTkLabel(self, text="Number of profiles to scan")
-        self.descLabel.grid(row=1, column=0, padx=(10, 0), pady=(10, 0), sticky="nw")
+        descLabel = customtkinter.CTkLabel(self, text="Number of profiles to scan")
+        descLabel.grid(row=1, column=0, padx=(10, 0), pady=(10, 0), sticky="nw")
         self.profilesNumber = customtkinter.CTkEntry(self)
         self.profilesNumber.insert(0, params["count"])
-        self.profilesNumber.grid(row=1, column=1, padx=(0, 10), pady=(10, 10), sticky="nsew")
+        self.profilesNumber.grid(row=1, column=1, padx=(0, 10), pady=(10, 0), sticky="nsew")
+
+        # Animation delay
+        descLabel = customtkinter.CTkLabel(self, text="Animation Delay (seconds)")
+        descLabel.grid(row=2, column=0, padx=(10, 0), pady=(10, 0), sticky="nw")
+        self.animationDelay = customtkinter.CTkEntry(self)
+        self.animationDelay.insert(0, params["delay"])
+        self.animationDelay.grid(row=2, column=1, padx=(0, 10), pady=(10, 10), sticky="nsew")
 
     def get(self):
-        return {"count": self.profilesNumber.get()}
+        return {
+            "count": self.profilesNumber.get(),
+            "delay": self.animationDelay.get()
+        }
 
 
 class OutputFrame(customtkinter.CTkFrame):
@@ -305,11 +315,11 @@ class App(customtkinter.CTk):
 
     def getScaledSizeStr(self):
         width, height = pyautogui.size()
-        SIZE_STR = "380x558"
+        SIZE_STR = "380x610"
         if width == 1920 and height == 1080:
             return SIZE_STR
         else:
-            return "{}x{}".format(int(380/1920*width), 558)
+            return "{}x{}".format(int(380/1920*width), 610)
 
 
     def updateProgress(self, value, total, timeInterval):

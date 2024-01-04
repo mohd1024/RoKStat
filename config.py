@@ -1,15 +1,16 @@
 import os
 import configparser
 
-SETTINGS_FILE = 'settings.ini'
+SETTINGS_FILE = "settings.ini"
 
 DEFAULT_PARAMS = {
     "device": "pc",
     "window": "Rise of Kingdoms",
     "serial": "127.0.0.1:5555",
-    "count": "350",
+    "count": "300",
     "dir": os.getcwd(),
-    "tag": "KvK-Start"
+    "tag": "KvK-Start",
+    "delay": "0.5"
 }
 
 
