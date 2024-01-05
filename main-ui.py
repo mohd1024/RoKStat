@@ -279,7 +279,7 @@ class App(customtkinter.CTk):
         self.scanFrame.grid(row=3, column=0, padx=10, pady=10, sticky="sew", columnspan=2)
         self.scanFrame.grid_columnconfigure((1, 2), weight=1)
 
-        self.button = customtkinter.CTkButton(self.scanFrame, text="Start Scan", command=self.button_callback,
+        self.button = customtkinter.CTkButton(self.scanFrame, text="Start Scan", command=self.start_scanning_callback,
                                               width=100)
         self.button.grid(row=0, column=0, padx=10, pady=(10, 3), sticky="nsw", rowspan=2)
 
@@ -321,6 +321,14 @@ class App(customtkinter.CTk):
         else:
             return "{}x{}".format(int(380/1920*width), 610)
 
+    def getScaledScanningSizeStr(self):
+        width, height = pyautogui.size()
+        SIZE_STR = "380x120"
+        if width == 1920 and height == 1080:
+            return SIZE_STR
+        else:
+            return "{}x{}".format(int(380/1920*width), 120)
+
 
     def updateProgress(self, value, total, timeInterval):
         self.progressbar.set(value / total)
@@ -335,6 +343,7 @@ class App(customtkinter.CTk):
             # Disable/enable the start/stop buttons
             self.button.configure(state="normal")
             self.stopButton.configure(state="disabled")
+            self.set_view("main")
 
     def stopScanning(self):
         self.stopButton.configure(state="disabled")
@@ -350,8 +359,26 @@ class App(customtkinter.CTk):
 
         self.button.configure(state="normal")
         self.stopButton.configure(text="Stop (F10)")
+        self.set_view("main")
 
-    def button_callback(self):
+    def set_view(self, view="main"):
+        if view == "scan":
+            self.sourceFrame.grid_forget()
+            self.scanParams.grid_forget()
+            self.outFrame.grid_forget()
+
+            # move the application to the top-left corner.
+            self.geometry("{}+1+1".format(self.getScaledScanningSizeStr()))
+        else:
+            self.sourceFrame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsew")
+            self.scanParams.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="nsew")
+            self.outFrame.grid(row=2, column=0, padx=10, pady=(10, 0), sticky="nsew")
+
+            # move the application to the top-left corner.
+            self.geometry("{}+1+1".format(self.getScaledSizeStr()))
+
+
+    def start_scanning_callback(self):
         params = self.sourceFrame.get()
         params.update(self.scanParams.get())
         params.update(self.outFrame.get())
@@ -380,8 +407,8 @@ class App(customtkinter.CTk):
                 )
                 return
 
-            # move the application to the top-left corner.
-            self.geometry("{}+10+10".format(self.getScaledSizeStr()))
+            # Switch to scanning display
+            self.set_view("scan")
 
         else:
             # Check if adb installed
