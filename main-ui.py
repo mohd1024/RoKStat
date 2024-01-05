@@ -253,10 +253,10 @@ class App(customtkinter.CTk):
         super().__init__()
 
         hk = SystemHotkey()
-        hk.register(['f10'], callback=lambda event: self.stopScanning())
+        hk.register(['f10'], callback=lambda event: self.stop_scanning())
 
         self.title("RoKStat")
-        self.geometry(self.getScaledSizeStr())
+        self.geometry(self.get_scaled_size_str())
         self.attributes('-topmost', True)
 
         self.grid_columnconfigure(0, weight=1)
@@ -283,7 +283,7 @@ class App(customtkinter.CTk):
                                               width=100)
         self.button.grid(row=0, column=0, padx=10, pady=(10, 3), sticky="nsw", rowspan=2)
 
-        self.stopButton = customtkinter.CTkButton(self.scanFrame, text="Stop (F10)", command=self.stopScanning,
+        self.stopButton = customtkinter.CTkButton(self.scanFrame, text="Stop (F10)", command=self.stop_scanning,
                                                   width=100, height=18, state="disabled")
         self.stopButton.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="sw")
 
@@ -313,24 +313,23 @@ class App(customtkinter.CTk):
                                                    width=80, height=18, anchor="e")
         self.timeToFinish.grid(row=2, column=2, padx=(0, 10), pady=(0, 5), sticky="ne")
 
-    def getScaledSizeStr(self):
+    def get_scaled_size_str(self):
         width, height = pyautogui.size()
         SIZE_STR = "380x610"
         if width == 1920 and height == 1080:
             return SIZE_STR
         else:
-            return "{}x{}".format(int(380/1920*width), 610)
+            return "{}x{}".format(int(380 / 1920 * width), 610)
 
-    def getScaledScanningSizeStr(self):
+    def get_scaled_scanning_size_str(self):
         width, height = pyautogui.size()
-        SIZE_STR = "380x120"
+        SIZE_STR = "380x115"
         if width == 1920 and height == 1080:
             return SIZE_STR
         else:
-            return "{}x{}".format(int(380/1920*width), 120)
+            return "{}x{}".format(int(380 / 1920 * width), 115)
 
-
-    def updateProgress(self, value, total, timeInterval):
+    def update_progress(self, value, total, timeInterval):
         self.progressbar.set(value / total)
         self.scannedNoVar.set(str(value))
         timePerProfile = int(timeInterval.total_seconds() / value)
@@ -345,7 +344,7 @@ class App(customtkinter.CTk):
             self.stopButton.configure(state="disabled")
             self.set_view("main")
 
-    def stopScanning(self):
+    def stop_scanning(self):
         self.stopButton.configure(state="disabled")
         self.stopButton.configure(text="Stopping ...")
         self.update_idletasks()
@@ -368,15 +367,14 @@ class App(customtkinter.CTk):
             self.outFrame.grid_forget()
 
             # move the application to the top-left corner.
-            self.geometry("{}+1+1".format(self.getScaledScanningSizeStr()))
+            self.geometry("{}+0+0".format(self.get_scaled_scanning_size_str()))
         else:
             self.sourceFrame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsew")
             self.scanParams.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="nsew")
             self.outFrame.grid(row=2, column=0, padx=10, pady=(10, 0), sticky="nsew")
 
             # move the application to the top-left corner.
-            self.geometry("{}+1+1".format(self.getScaledSizeStr()))
-
+            self.geometry("{}+0+0".format(self.get_scaled_size_str()))
 
     def start_scanning_callback(self):
         params = self.sourceFrame.get()
@@ -447,7 +445,7 @@ class App(customtkinter.CTk):
         self.progressbar.set(0)
         self.scannedNoVar.set(0)
         self.timeToFinishVar.set("...")
-        self.scanThread = threading.Thread(name="scanner", target=scanner.start, args=(self.updateProgress,))
+        self.scanThread = threading.Thread(name="scanner", target=scanner.start, args=(self.update_progress,))
 
         # Disable/enable the start/stop buttons
         self.button.configure(state="disabled")
