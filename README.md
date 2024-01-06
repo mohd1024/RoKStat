@@ -6,6 +6,16 @@ For comments, suggestions, and to stay informed about updates, please join our D
 
 https://discord.gg/egZbTarX6q
 
+## Latest Updates
+- **Scaling** coordinates if the resolution is not 1920x1080. Not guaranteed, the 1920x1080 is recommended.
+- Added the option to set the **animation delay** in the GUI, that's how much to wait to give the game the time to switch from one page to another. If the game is slow, you may need to increase this delay.
+- Reduce the size of the GUI when the scanning starts.
+- Introduced some optimizations to increase the accuracy of the OCR.
+
+## Known Issues
+- The OCR may generate some errors. Specifically, we noticed that "7" may be recognised as "1" in some cases.
+- The **Stop** scanning button does not work all the time. Will be reviewed in future updates.
+
 ## Dependencies
 
 The following tools are required to run this program properly:

@@ -255,6 +255,8 @@ class App(customtkinter.CTk):
         hk = SystemHotkey()
         hk.register(['f10'], callback=lambda event: self.stop_scanning())
 
+        self.device_type = "pc"
+
         self.title("RoKStat")
         self.geometry(self.get_scaled_size_str())
         self.attributes('-topmost', True)
@@ -358,7 +360,9 @@ class App(customtkinter.CTk):
 
         self.button.configure(state="normal")
         self.stopButton.configure(text="Stop (F10)")
-        self.set_view("main")
+
+        if self.device_type == "pc":
+            self.set_view("main")
 
     def set_view(self, view="main"):
         if view == "scan":
@@ -385,6 +389,8 @@ class App(customtkinter.CTk):
 
         # Validation
         if params["device"] == "pc":
+            self.device_type = "pc"
+
             # The program must be running in administration mode. If not restart with admin privileges.
             if not is_admin():
                 tkinter.messagebox.showinfo(
@@ -409,6 +415,8 @@ class App(customtkinter.CTk):
             self.set_view("scan")
 
         else:
+            self.device_type = "adb"
+
             # Check if adb installed
             if not StatsScanner.is_tool("adb"):
                 tkinter.messagebox.showerror(title="RoKStat - Missing Dependencies",
