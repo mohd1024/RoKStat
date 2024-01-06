@@ -256,6 +256,7 @@ class App(customtkinter.CTk):
         hk.register(['f10'], callback=lambda event: self.stop_scanning())
 
         self.device_type = "pc"
+
         self.title("RoKStat")
         self.geometry(self.get_scaled_size_str())
         self.attributes('-topmost', True)
