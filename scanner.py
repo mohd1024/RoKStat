@@ -55,7 +55,7 @@ class DevicePC:
 
         # format (x, y, width, height, numbers_only, invert, filters)
         self.PROFILE_PAGE_COORDINATES = {
-            "id": (self.scaleHorizontal(1220), self.scaleVertical(323), self.scaleHorizontal(190),
+            "id": (self.scaleHorizontal(1160), self.scaleVertical(323), self.scaleHorizontal(250),
                    self.scaleVertical(32), False, ImageProcessingProfile.ID, True, False),
             "alliance": (self.scaleHorizontal(1025), self.scaleVertical(438), self.scaleHorizontal(390),
                          self.scaleVertical(34), False, ImageProcessingProfile.ALLIANCE, True, True,
@@ -260,6 +260,7 @@ class StatsScanner:
         "T2 Points",
         "T1 Kills",
         "T1 Points",
+        "Kingdom"
     ]
 
     @staticmethod
@@ -366,7 +367,7 @@ class StatsScanner:
             # subImg = subImg.filter(ImageFilter.UnsharpMask(radius=10, percent=50, threshold=0))
             # Fill the first 3 pixels by white.
             subImg.paste(255, [0, 0, self.device.scaleHorizontal(3), subImg.size[1]])
-            confStr = " -c tessedit_char_whitelist=ID0123456789():"
+            confStr = " -c tessedit_char_whitelist=ID0123456789():#"
             # subImg.save("debug/{}-id.png".format(self.currentProfile), "PNG")
         elif preProcessingProfile == ImageProcessingProfile.ALLIANCE:
             fillWidth = coords[8]
@@ -506,14 +507,17 @@ class StatsScanner:
         # This is a profile page, extract the alliance name and the power from the profile page
         profInfo = self.read_stats(proImg, self.device.PROFILE_PAGE_COORDINATES)
 
-        # The first element in the result is the ID. Remove "(ID:" and ")".
-        profInfo[0] = (
-            profInfo[0]
-            .replace("ID:", "")
-            .replace("1D:", "")
-            .replace("(", "")
-            .replace(")", "")
-        )
+        # The first element in the result is the ID. Remove "(ID:" and ")" if they are inaccurately read.
+        rawID = profInfo[0].replace("ID:", "").replace("1D:", "").replace("(", "").replace(")", "")
+
+        # If scanning the LK, the ID will contain the kingdom number in the form of (id#kingdom)
+        id_segs = rawID.split('#')
+        net_ID = id_segs[0]
+        kingdom = "-"
+        if len(id_segs) > 1:
+            kingdom = id_segs[1]
+
+        profInfo[0] = net_ID
 
         # The second element in the result is the alliance, cut the name and keep the short alliance name
         sIndex = profInfo[1].find("[")
@@ -575,6 +579,9 @@ class StatsScanner:
         time.sleep(2 * self.jumpDelay)
         username = self.device.get_clipboard()
         pstats.insert(2, username)
+
+        # Insert the kingdom at the end for now
+        pstats.append(kingdom)
 
         # Exit the info page
         self.show_next_screen("exitinfo")
