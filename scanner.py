@@ -76,11 +76,11 @@ class DevicePC:
 
         # format (x, y, width, height, numbers_only, invert, filters)
         self.INFO_PAGE_COORDINATES = {
-            "res-gather": (self.scaleHorizontal(1185), self.scaleVertical(672), self.scaleHorizontal(226),
+            "res-gather": (self.scaleHorizontal(1185), self.scaleVertical(687), self.scaleHorizontal(226),
                            self.scaleVertical(38), True, ImageProcessingProfile.INFO, True, False),
-            "res-assist": (self.scaleHorizontal(1185), self.scaleVertical(724), self.scaleHorizontal(226),
+            "res-assist": (self.scaleHorizontal(1185), self.scaleVertical(736), self.scaleHorizontal(226),
                            self.scaleVertical(38), True, ImageProcessingProfile.INFO, True, False),
-            "dead-count": (self.scaleHorizontal(1220), self.scaleVertical(532), self.scaleHorizontal(190),
+            "dead-count": (self.scaleHorizontal(1220), self.scaleVertical(542), self.scaleHorizontal(190),
                            self.scaleVertical(38), True, ImageProcessingProfile.INFO, True, True),
         }
 
